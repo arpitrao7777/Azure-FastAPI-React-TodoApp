@@ -1,0 +1,11 @@
+trigger: none
+
+pool: testpool
+
+stages:
+- stage:
+  displayName: Terraforminitandplan
+  jobs:
+  - job: Terraforminitandplan
+    steps:
+    
