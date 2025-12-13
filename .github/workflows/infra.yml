@@ -48,6 +48,7 @@ jobs:
     needs: Terraforminitandplan
     runs-on: self hosted
     if: github.ref == 'refs/heads/main'
+    environment: dev
     steps:
       - name: Checkout
         uses: actions/checkout@v6.0.1
