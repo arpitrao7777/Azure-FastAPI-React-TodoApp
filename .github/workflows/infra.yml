@@ -46,7 +46,7 @@ jobs:
   Terraform-Apply:
     name: Terraform-apply
     needs: Terraforminitandplan
-    runs-on: self hosted
+    runs-on: self-hosted
     if: github.ref == 'refs/heads/main'
     environment: dev
     steps:
