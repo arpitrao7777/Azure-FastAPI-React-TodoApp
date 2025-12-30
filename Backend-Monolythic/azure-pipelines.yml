@@ -1,0 +1,124 @@
+trigger: none
+
+pool: testpool
+
+steps:
+
+# ----------------------------------------------------
+# STEP 0: PREPARE DIRECTORY ON VM
+# ----------------------------------------------------
+- task: SSH@0
+  displayName: "Prepare backend directory on VM"
+  inputs:
+    sshEndpoint: Backend
+    runOptions: inline
+    failOnStderr: false
+    inline: |
+      sudo mkdir -p /home/adminuser3/pytodobackend
+      sudo chown -R adminuser3:adminuser3 /home/adminuser3/pytodobackend
+
+# ----------------------------------------------------
+# STEP 1: COPY BACKEND CODE (EXCLUDE .git)
+# ----------------------------------------------------
+- task: CopyFilesOverSSH@0
+  displayName: "Copy backend code to VM"
+  inputs:
+    sshEndpoint: Backend
+    sourceFolder: $(System.DefaultWorkingDirectory)
+    contents: |
+      **/*
+      !.git/**
+    targetFolder: /home/adminuser3/pytodobackend
+    cleanTargetFolder: true
+
+# ----------------------------------------------------
+# STEP 2: INSTALL DEPS & START BACKEND
+# ----------------------------------------------------
+- task: SSH@0
+  displayName: "Install deps & start backend (minimal)"
+  continueOnError: true
+  inputs:
+    sshEndpoint: Backend
+    runOptions: inline
+    inline: |
+      cd /home/adminuser3/pytodobackend
+
+      sudo apt-get update -y
+      sudo apt-get install -y curl python3-pip unixodbc-dev
+
+      curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+      curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list | sudo tee /etc/apt/sources.list.d/msprod.list
+
+      sudo apt-get update -y
+      sudo ACCEPT_EULA=Y sudo apt-get install -y msodbcsql18
+
+      pip3 install --break-system-packages -r requirements.txt
+
+      pkill -f "python3 -m uvicorn" || true
+      nohup python3 -m uvicorn app:app --host 0.0.0.0 --port 8000 > backend.log 2>&1 &
+
+
+
+
+
+# trigger: none
+
+# pool: testpool
+
+# steps:
+
+# # ----------------------------------------------------
+# # STEP 0: PREPARE DIRECTORY ON VM
+# # ----------------------------------------------------
+# - task: SSH@0
+#   displayName: "Prepare backend directory on VM"
+#   inputs:
+#     sshEndpoint: Backend
+#     runOptions: inline
+#     inline: |
+#       sudo mkdir -p /home/adminuser3/pytodobackend
+#       sudo chown -R adminuser3:adminuser3 /home/adminuser3/pytodobackend
+
+# # ----------------------------------------------------
+# # STEP 1: COPY BACKEND CODE (EXCLUDE .git)
+# # ----------------------------------------------------
+# - task: CopyFilesOverSSH@0
+#   displayName: "Copy backend code to VM"
+#   inputs:
+#     sshEndpoint: Backend
+#     sourceFolder: $(System.DefaultWorkingDirectory)
+#     contents: |
+#       **/*
+#       !.git/**
+#     targetFolder: /home/adminuser3/pytodobackend
+#     cleanTargetFolder: true
+
+# # ----------------------------------------------------
+# # STEP 2: INSTALL DEPS & START BACKEND
+# # ----------------------------------------------------
+# - task: SSH@0
+#   displayName: "Install dependencies and start backend"
+#   inputs:
+#     sshEndpoint: Backend
+#     runOptions: inline
+#     inline: |
+#       set -e
+
+#       cd /home/adminuser3/pytodobackend
+
+#       echo "Installing system dependencies for pyodbc"
+#       sudo apt update
+#       sudo apt install -y unixodbc unixodbc-dev
+
+#       echo "Installing pip3 if missing"
+#       sudo apt install -y python3-pip
+
+#       echo "Installing Python dependencies"
+#       pip3 install --break-system-packages -r requirements.txt
+
+#       echo "Stopping old backend if running"
+#       pkill -f "python3 -m uvicorn" || true
+#       pkill -f app.py || true
+
+#       echo "Starting backend using python module"
+#       nohup python3 -m uvicorn app:app --host 0.0.0.0 --port 8000 > backend.log 2>&1 &

@@ -1,0 +1,72 @@
+trigger: none 
+pool: testpool
+
+stages:
+- stage: InstallAndPublishArtifacts
+  displayName: Install And Publish Artifacts
+  jobs:
+  - job: InstallAndPublishArtifacts
+    displayName: Install And Publish Artifacts
+    steps: 
+    - task: NodeTool@0
+      inputs:
+        versionSource: 'spec'
+        versionSpec: '16.x'
+
+
+    - task: Npm@1
+      displayName: npm install
+      inputs:
+        command: 'install'
+        workingDir: '$(System.DefaultWorkingDirectory)'
+
+    - task: Npm@1
+      displayName: npm run build
+      inputs:
+        command: 'custom'
+        workingDir: '$(System.DefaultWorkingDirectory)'
+        customCommand: 'run build'
+
+    - task: PublishPipelineArtifact@1
+      displayName: Publish Artifacts
+      inputs:
+        targetPath: '$(System.DefaultWorkingDirectory)/build'
+        artifact: 'todoui'
+        publishLocation: 'pipeline'
+
+- stage: DownloadArtifactsandDeployment
+  dependsOn: InstallAndPublishArtifacts
+  displayName: Download Artifacts and Deployment
+  jobs:
+  - job: DownloadArtifactsandDeployment
+    displayName: Download Artifacts and Deployment
+    steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: Download Artifacts
+      inputs:
+        buildType: 'current'
+        artifactName: 'todoui'
+        targetPath: '$(Build.ArtifactStagingDirectory)'
+
+    - task: SSH@0
+      displayName: Running Command
+      inputs:
+        sshEndpoint: 'frontend'
+        runOptions: 'commands'
+        commands: |
+          export DEBIAN_FRONTEND=noninteractive
+          sudo apt-get update 
+          sudo apt-get install -y nginx
+          sudo rm -rf /var/www/html/*
+          sudo chown -R www-data:www-data /var/www/html
+          sudo chmod -R 777 /var/www/html
+        readyTimeout: '20000'
+
+    - task: CopyFilesOverSSH@0
+      displayName: Copy Build to nginx
+      inputs:
+        sshEndpoint: 'frontend'
+        sourceFolder: '$(Build.ArtifactStagingDirectory)'
+        contents: '**'
+        targetFolder: '/var/www/html/'
+        readyTimeout: '20000'
