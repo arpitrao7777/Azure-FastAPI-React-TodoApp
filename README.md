@@ -77,11 +77,11 @@ Azure-FastAPI-React-TodoApp
 
 - Separate modules for:
 
-- Resource Group
+  - Resource Group
 
-- Virtual Machines
+  - Virtual Machines
 
-- Database
+  - Database
 
 - Environment-specific variables using terraform.tfvars
 
@@ -94,13 +94,13 @@ Azure-FastAPI-React-TodoApp
 
 - Automated stages include:
 
-- Code checkout
+  - Code checkout
 
-- Build
+  - Build
 
-- Docker image creation
+  - Docker image creation
 
-- Deployment to Azure VMs
+  - Deployment to Azure VMs
 
 - Separate pipelines for frontend and backend
 
