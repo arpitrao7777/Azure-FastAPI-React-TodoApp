@@ -70,81 +70,94 @@ Azure-FastAPI-React-TodoApp
 └── README.md
 
 ```
+---
 
 ## ⚙️ Infrastructure as Code (Terraform)
-Modular Terraform architecture
+- Modular Terraform architecture
 
-Separate modules for:
+- Separate modules for:
 
-Resource Group
+- Resource Group
 
-Virtual Machines
+- Virtual Machines
 
-Database
+- Database
 
-Environment-specific variables using terraform.tfvars
+- Environment-specific variables using terraform.tfvars
 
-Enables scalable, reusable, and maintainable infrastructure
+- Enables scalable, reusable, and maintainable infrastructure
+
+---
 
 ## 🔄 CI/CD Pipeline
-Azure DevOps YAML-based pipelines
+- Azure DevOps YAML-based pipelines
 
-Automated stages include:
+- Automated stages include:
 
-Code checkout
+- Code checkout
 
-Build
+- Build
 
-Docker image creation
+- Docker image creation
 
-Deployment to Azure VMs
+- Deployment to Azure VMs
 
-Separate pipelines for frontend and backend
+- Separate pipelines for frontend and backend
 
-Fully automated deployment with minimal manual intervention
+- Fully automated deployment with minimal manual intervention
+
+---
 
 ## 🔐 Key DevOps Practices Implemented
-Infrastructure as Code (IaC)
+- Infrastructure as Code (IaC)
 
-CI/CD automation
+- CI/CD automation
 
-Environment segregation
+- Environment segregation
 
-Modular Terraform design
+- Modular Terraform design
 
-VM-based application hosting
+- VM-based application hosting
 
-Frontend–Backend–Database integration
+- Frontend–Backend–Database integration
 
-Version control using Git & GitHub
+- Version control using Git & GitHub
+
+---
 
 ## 🛠️ Tech Stack
-Cloud: Microsoft Azure
+- **Cloud:** Microsoft Azure
 
-Frontend: React.js
+- **Frontend:** React.js
 
-Backend: FastAPI (Python)
+- **Backend:** FastAPI (Python)
 
-Database: Relational Database
+- **Database:** Relational Database
 
-IaC: Terraform
+- **IaC:** Terraform
 
-CI/CD: Azure DevOps Pipelines
+- **CI/CD:** Azure DevOps Pipelines
 
-Containerization: Docker
+- **Containerization:** Docker
 
-OS & Tools: Linux, VS Code, Git
+- **OS & Tools:** Linux, VS Code, Git
+
+---
 
 ## 🚀 Outcome
-Successfully deployed a production-style application
+- Successfully deployed a production-style application
 
-Achieved automated infrastructure provisioning
+- Achieved automated infrastructure provisioning
 
-Implemented reliable CI/CD pipelines
+- Implemented reliable CI/CD pipelines
 
-Demonstrated real-world DevOps workflow from code to production
+- Demonstrated real-world DevOps workflow from code to production
+
+---
 
 ## 📌 Author
 Arpit Yadav
+
 arpit39115@gmail.com
+
 DevOps Engineer | Azure | Terraform | CI/CD | Docker | Kubernetes
